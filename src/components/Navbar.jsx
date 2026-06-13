@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import { company, nav } from '../data/site.js'
 import Logo from './Logo.jsx'
 
@@ -7,27 +8,36 @@ export default function Navbar() {
   return (
     <header className="nav">
       <div className="container nav__inner">
-        <a href="#top" className="brand">
+        <Link to="/" className="brand" onClick={() => setOpen(false)}>
           <Logo />
           <span className="brand__name">
             {company.shortName}
             <small>Development</small>
           </span>
-        </a>
+        </Link>
 
         <nav className="nav__links" data-open={open}>
           {nav.map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setOpen(false)}>
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) => (isActive ? 'is-active' : undefined)}
+              onClick={() => setOpen(false)}
+            >
               {item.label}
-            </a>
+            </NavLink>
           ))}
+          <Link to="/contact" className="btn btn--gold nav__cta--mobile" onClick={() => setOpen(false)}>
+            Begin a conversation
+          </Link>
         </nav>
 
-        <a href="#contact" className="btn btn--gold nav__cta">Start a conversation</a>
+        <Link to="/contact" className="btn btn--gold nav__cta">Begin a conversation</Link>
 
         <button
           className="nav__toggle"
           aria-label="Toggle menu"
+          aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
           ☰

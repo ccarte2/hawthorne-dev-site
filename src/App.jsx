@@ -1,23 +1,22 @@
+import { useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
-import Hero from './components/Hero.jsx'
-import Services from './components/Services.jsx'
-import Approach from './components/Approach.jsx'
-import Projects from './components/Projects.jsx'
-import About from './components/About.jsx'
-import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
 
+// Shared layout: persistent nav + footer wrap the routed page.
 export default function App() {
+  const { pathname } = useLocation()
+
+  // Scroll to top on navigation (each page is its own document).
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <>
       <Navbar />
-      <main>
-        <Hero />
-        <Services />
-        <Approach />
-        <Projects />
-        <About />
-        <Contact />
+      <main id="top">
+        <Outlet />
       </main>
       <Footer />
     </>
