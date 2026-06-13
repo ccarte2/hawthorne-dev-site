@@ -26,7 +26,7 @@ export const company = {
   serviceArea: 'Telluride & San Miguel County, Colorado',
   // Existing address from prior site — confirm before launch.
   email: 'info@hawthornedevco.com',
-  phone: NEEDS('Phone', 'Add the business line in src/data/site.js'),
+  phone: null, // intentionally not shown for now
   domain: 'hawthornedevco.com',
   url: 'https://hawthornedevco.com',
 }
@@ -126,12 +126,11 @@ export const residential = {
   howWeBuildHeading: 'How we build',
   howWeBuild: [
     { title: 'One point of accountability.', body: 'The principal runs your project personally.' },
+    { title: 'Designed in-house, start to finish.', body: 'We have our own architect, so we can take your home from first renderings all the way to move-in — one team, fully accountable.' },
+    { title: 'A thoughtful approval process.', body: 'We work directly with Telluride Planning so the HARC (Historic & Architectural Review Commission) review is handled with care — and you’re clear on timelines and expectations from the start.' },
     { title: 'Honest budgets.', body: 'Real cost tracking, no surprises dressed up as change orders.' },
     { title: 'Built for the climate.', body: 'Elevation, weather, and short seasons planned for, not discovered.' },
-    {
-      title: 'Documented and warranted.',
-      body: NEEDS('Warranty terms', 'Confirm the warranty you offer before publishing'),
-    },
+    { title: 'Documented and warranted.', body: 'Your home is handed over fully documented, and we stand behind our work.' },
   ],
   cta: { label: 'Plan your home', to: '/contact' },
 }
@@ -176,14 +175,16 @@ export const about = {
       'Hawthorne Development was founded to build in Telluride and San Miguel County the way the best mountain homes and buildings should be built — carefully, honestly, and to last.',
   },
   principleHeading: 'The principle',
-  // The founder name is woven into the sentence; rendered specially so the
-  // placeholder reads cleanly until filled.
-  founderName: NEEDS('Founder name', 'Add the founder’s name'),
+  // Founder name(s) woven into the sentence below.
+  founderName: 'Chris Carter and Bevin Carter',
   principleLead:
-    'Hawthorne is led directly by its founder, {FOUNDER}. That’s deliberate. When you hire us, you work with the person responsible for the outcome — not a sales team that hands you off after the contract is signed.',
+    'Hawthorne is led directly by its founders, {FOUNDER}. That’s deliberate. When you hire us, you work with the people responsible for the outcome — not a sales team that hands you off after the contract is signed.',
+  // Still to add: 3–5 sentences of real, verifiable background (prior
+  // construction / development / real-estate work, where, how long, notable
+  // past work). Hidden on the live site until filled; shown in `npm run dev`.
   founderBackground: NEEDS(
     'Founder background — the most important item on the site',
-    'Write 3–5 sentences of real, verifiable experience: prior construction / development / real-estate work, where, how long, notable past projects or roles. A new firm’s credibility rests on this.'
+    'Write 3–5 sentences of real, verifiable experience for Chris & Bevin Carter. A new firm’s credibility rests on this.'
   ),
   howWeWorkHeading: 'How we work',
   howWeWork: [
@@ -222,7 +223,7 @@ export const portfolio = {
   ],
   fallback: {
     body: 'Our first homes are under construction now. We’re taking a small number of new projects for {SEASON} — if you’d like to be among them, let’s talk.',
-    season: NEEDS('Season / year', 'e.g. “Fall 2026”'),
+    season: 'the 2026 season',
   },
   selectivityHeading: 'A note on selectivity',
   selectivity:
@@ -247,4 +248,11 @@ export const contact = {
   projectTypes: ['Custom home', 'Renovation', 'Commercial', 'Other'],
   submitLabel: 'Send inquiry',
   directHeading: 'Reach us directly',
+  // Kit (kit.com) form "Hawthorne Development — Inquiries" (uid 08089ad645,
+  // auto-confirm on). Submissions post here; name + phone + project type +
+  // location are composed into the Message custom field so nothing is lost.
+  kit: {
+    uid: '08089ad645',
+    action: 'https://app.kit.com/forms/9560450/subscriptions',
+  },
 }

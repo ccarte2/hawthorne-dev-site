@@ -1,18 +1,54 @@
 import { useState } from 'react'
 import Seo from '../components/Seo.jsx'
 import PageHero from '../components/PageHero.jsx'
-import { Blank } from '../components/Blank.jsx'
-import { company, contact, isBlank } from '../data/site.js'
+import { company, contact } from '../data/site.js'
 
 export default function Contact() {
   const c = contact
-  const [sent, setSent] = useState(false)
+  // status: 'idle' | 'submitting' | 'sent' | 'error'
+  const [status, setStatus] = useState('idle')
 
-  // Stub handler — wire to a form service (Formspree, Basin) or backend
-  // before launch. See README. Currently does not send anything.
-  function handleSubmit(e) {
+  // Submit the inquiry to Kit. Name / phone / project type / location are
+  // composed into the Message custom field so the full inquiry is captured
+  // even though the Kit form only stores email + first name + message.
+  async function handleSubmit(e) {
     e.preventDefault()
-    setSent(true)
+    const form = e.currentTarget
+    const data = new FormData(form)
+    const name = (data.get('name') || '').toString().trim()
+    const email = (data.get('email') || '').toString().trim()
+    const phone = (data.get('phone') || '').toString().trim()
+    const projectType = (data.get('project-type') || '').toString().trim()
+    const location = (data.get('location') || '').toString().trim()
+    const message = (data.get('message') || '').toString().trim()
+
+    const composed = [
+      name && `Name: ${name}`,
+      phone && `Phone: ${phone}`,
+      projectType && `Project type: ${projectType}`,
+      location && `Location: ${location}`,
+      '',
+      message,
+    ].filter((line) => line !== false).join('\n')
+
+    const body = new URLSearchParams()
+    body.set('email_address', email)
+    if (name) body.set('fields[first_name]', name)
+    body.set('fields[message]', composed)
+
+    setStatus('submitting')
+    try {
+      const res = await fetch(c.kit.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body,
+      })
+      if (!res.ok) throw new Error(`Kit responded ${res.status}`)
+      setStatus('sent')
+      form.reset()
+    } catch (err) {
+      setStatus('error')
+    }
   }
 
   return (
@@ -25,6 +61,11 @@ export default function Contact() {
           <div className="contact__grid">
             <form className="form" onSubmit={handleSubmit}>
               <h2 className="h3-size">{c.formHeading}</h2>
+              {status === 'sent' && (
+                <p className="form__status form__status--ok" role="status">
+                  Thank you — your note is on its way. We’ll be in touch shortly.
+                </p>
+              )}
               <div className="row">
                 <div>
                   <label htmlFor="name">Name</label>
@@ -56,20 +97,19 @@ export default function Contact() {
                 <label htmlFor="message">Tell us about your project</label>
                 <textarea id="message" name="message" rows="5" placeholder="A few lines about what you have in mind…" required />
               </div>
-              <button type="submit" className="btn btn--gold" style={{ justifySelf: 'start' }}>
-                {sent ? 'Thanks — we’ll be in touch' : c.submitLabel}
+              <button type="submit" className="btn btn--gold" style={{ justifySelf: 'start' }} disabled={status === 'submitting'}>
+                {status === 'submitting' ? 'Sending…' : status === 'sent' ? 'Sent' : c.submitLabel}
               </button>
-              <p className="form__note">Demo form — not yet connected. Hook it up to a form service (Formspree, Basin) or backend before launch.</p>
+              {status === 'error' && (
+                <p className="form__status form__status--error" role="alert">
+                  Something went wrong sending your note. Please email us directly at{' '}
+                  <a href={`mailto:${company.email}`}>{company.email}</a>.
+                </p>
+              )}
             </form>
 
             <aside className="contact__direct">
               <h2 className="h3-size">{c.directHeading}</h2>
-              <div className="contact__detail">
-                <span className="contact__label">Phone</span>
-                {isBlank(company.phone)
-                  ? <Blank value={company.phone} />
-                  : <a href={`tel:${company.phone}`}>{company.phone}</a>}
-              </div>
               <div className="contact__detail">
                 <span className="contact__label">Email</span>
                 <a href={`mailto:${company.email}`}>{company.email}</a>

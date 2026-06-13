@@ -37,23 +37,34 @@ Edit all copy in **`src/data/site.js`** — it's organized one object per page.
 
 ## Filling the blanks before launch
 
-Copy still needing real input is marked with `NEEDS(...)` in `src/data/site.js`
-and renders on the page as a visible **"To fill" / "Needs input"** placeholder
-(never as fake content). Replace each `NEEDS(...)` with a plain string:
+Copy still needing real input is marked with `NEEDS(...)` in `src/data/site.js`.
+Such placeholders are **hidden on the live/production build** and only show in
+`npm run dev` as a reminder. Replace each `NEEDS(...)` with a plain string to
+publish it. Status:
 
-- [ ] **Founder name + background** (About) — *the most important item on the site.*
-      A new firm's credibility rests on the founder's real, verifiable track record.
-- [ ] **Warranty terms** (Residential → "Documented and warranted")
-- [ ] **Phone number** (`company.phone`)
-- [ ] **Real in-progress projects** (Portfolio `projects: []`) — real work only,
-      no stock photos or others' projects. Until then it shows the honest
-      "now building" statement; fill the **season/year** there.
+- [x] **Founders' names** — Chris Carter and Bevin Carter (About).
+- [ ] **Founder background** (About) — *the most important item on the site.* Still
+      empty (hidden on the live site until filled). Add 3–5 sentences of real,
+      verifiable experience for Chris & Bevin.
+- [x] **Portfolio focus** — "new homes for the 2026 season" (honest "now building"
+      statement; no fake gallery). Add real projects to `portfolio.projects` when
+      ready (real work only — no stock photos).
+- [~] **Warranty terms** (Residential → "Documented and warranted") — currently a
+      generic line ("handed over fully documented, and we stand behind our work").
+      Replace with specific terms if you offer them.
+- [x] **Phone** — removed from the site for now (`company.phone = null`).
 - [ ] Confirm **email** (`info@hawthornedevco.com`) is correct.
+
+## Contact form → Kit
+
+The contact form submits to the Kit form **"Hawthorne Development — Inquiries"**
+(uid `08089ad645`, auto-confirm on). Config in `src/data/site.js` (`contact.kit`),
+handler in `src/pages/Contact.jsx`. Name / phone / project type / location are
+composed into the Kit **Message** custom field so the full inquiry is captured.
+Verified end-to-end (test submission → Confirmed subscriber in Kit).
 
 ## Also before launch
 
-- [ ] **Wire the contact form** — currently a non-functional stub. Connect to a
-      form service (Formspree, Basin) or a backend.
 - [ ] Confirm/replace the **brand color hexes** (top of `src/index.css`) with
       official colors. Current palette is a Telluride-inspired placeholder.
 - [ ] Replace the placeholder **`public/og-image.png`** with final brand artwork
